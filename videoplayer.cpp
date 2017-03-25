@@ -106,40 +106,41 @@ VideoPlayer::VideoPlayer(QWidget *parent)
   point1Color = QColor(0, 255, 0, 255);
   point1Color = QColor(0, 0, 255, 255);
 
-  plotcoordintates = new QCustomPlot;
-  plotcoordintates->addGraph(); plotcoordintates->addGraph(); plotcoordintates->addGraph();
-  plotcoordintates->addGraph(); plotcoordintates->addGraph(); plotcoordintates->addGraph();
-  plotcoordintates->graph(0)->setPen(QPen(Qt::red));
-  plotcoordintates->graph(1)->setPen(QPen(Qt::magenta));
-  plotcoordintates->graph(2)->setPen(QPen(Qt::green));
-  plotcoordintates->graph(3)->setPen(QPen(Qt::black));
-  plotcoordintates->graph(4)->setPen(QPen(Qt::blue));
-  plotcoordintates->graph(5)->setPen(QPen(Qt::gray));
-  plotcoordintates->xAxis2->setVisible(true);
-  plotcoordintates->xAxis2->setTickLabels(false);
-  plotcoordintates->yAxis2->setVisible(true);
-  plotcoordintates->yAxis2->setTickLabels(false);
-  connect(plotcoordintates->xAxis, SIGNAL(rangeChanged(QCPRange)), plotcoordintates->xAxis2, SLOT(setRange(QCPRange)));
-  connect(plotcoordintates->yAxis, SIGNAL(rangeChanged(QCPRange)), plotcoordintates->yAxis2, SLOT(setRange(QCPRange)));
-  plotcoordintates->graph(0)->setLineStyle((QCPGraph::LineStyle)QCPGraph::lsLine);
-  plotcoordintates->graph(0)->selectionDecorator()->setPen(QPen(Qt::red));
-  plotcoordintates->graph(0)->setScatterStyle(QCPScatterStyle(QCPScatterStyle::ssCircle, 5));
-  plotcoordintates->graph(1)->setLineStyle((QCPGraph::LineStyle)QCPGraph::lsLine);
-  plotcoordintates->graph(1)->selectionDecorator()->setPen(QPen(Qt::magenta));
-  plotcoordintates->graph(1)->setScatterStyle(QCPScatterStyle(QCPScatterStyle::ssCircle, 5));
-  plotcoordintates->graph(2)->setLineStyle((QCPGraph::LineStyle)QCPGraph::lsLine);
-  plotcoordintates->graph(2)->selectionDecorator()->setPen(QPen(Qt::green));
-  plotcoordintates->graph(2)->setScatterStyle(QCPScatterStyle(QCPScatterStyle::ssCircle, 5));
-  plotcoordintates->graph(3)->setLineStyle((QCPGraph::LineStyle)QCPGraph::lsLine);
-  plotcoordintates->graph(3)->selectionDecorator()->setPen(QPen(Qt::black));
-  plotcoordintates->graph(3)->setScatterStyle(QCPScatterStyle(QCPScatterStyle::ssCircle, 5));
-  plotcoordintates->graph(4)->setLineStyle((QCPGraph::LineStyle)QCPGraph::lsLine);
-  plotcoordintates->graph(4)->selectionDecorator()->setPen(QPen(Qt::blue));
-  plotcoordintates->graph(4)->setScatterStyle(QCPScatterStyle(QCPScatterStyle::ssCircle, 5));
-  plotcoordintates->graph(5)->setLineStyle((QCPGraph::LineStyle)QCPGraph::lsLine);
-  plotcoordintates->graph(5)->selectionDecorator()->setPen(QPen(Qt::gray));
-  plotcoordintates->graph(5)->setScatterStyle(QCPScatterStyle(QCPScatterStyle::ssCircle, 5));
-  plotcoordintates->setInteractions(QCP::iRangeDrag | QCP::iRangeZoom | QCP::iSelectPlottables);
+  plotxy21 = new QCustomPlot;
+  plotxy21->addGraph(); plotxy21->addGraph();
+  plotxy21->graph(0)->setPen(QPen(Qt::red));
+  plotxy21->graph(1)->setPen(QPen(Qt::green));
+  plotxy21->xAxis2->setVisible(true);
+  plotxy21->xAxis2->setTickLabels(false);
+  plotxy21->yAxis2->setVisible(true);
+  plotxy21->yAxis2->setTickLabels(false);
+  connect(plotxy21->xAxis, SIGNAL(rangeChanged(QCPRange)), plotxy21->xAxis2, SLOT(setRange(QCPRange)));
+  connect(plotxy21->yAxis, SIGNAL(rangeChanged(QCPRange)), plotxy21->yAxis2, SLOT(setRange(QCPRange)));
+  plotxy21->graph(0)->setLineStyle((QCPGraph::LineStyle)QCPGraph::lsLine);
+  plotxy21->graph(0)->selectionDecorator()->setPen(QPen(Qt::red));
+  plotxy21->graph(0)->setScatterStyle(QCPScatterStyle(QCPScatterStyle::ssCircle, 5));
+  plotxy21->graph(1)->setLineStyle((QCPGraph::LineStyle)QCPGraph::lsLine);
+  plotxy21->graph(1)->selectionDecorator()->setPen(QPen(Qt::green));
+  plotxy21->graph(1)->setScatterStyle(QCPScatterStyle(QCPScatterStyle::ssCircle, 5));
+  plotxy21->setInteractions(QCP::iRangeDrag | QCP::iRangeZoom | QCP::iSelectPlottables);
+
+  plotxy31 = new QCustomPlot;
+  plotxy31->addGraph(); plotxy31->addGraph();
+  plotxy31->graph(0)->setPen(QPen(Qt::red));
+  plotxy31->graph(1)->setPen(QPen(Qt::blue));
+  plotxy31->xAxis2->setVisible(true);
+  plotxy31->xAxis2->setTickLabels(false);
+  plotxy31->yAxis2->setVisible(true);
+  plotxy31->yAxis2->setTickLabels(false);
+  connect(plotxy31->xAxis, SIGNAL(rangeChanged(QCPRange)), plotxy31->xAxis2, SLOT(setRange(QCPRange)));
+  connect(plotxy31->yAxis, SIGNAL(rangeChanged(QCPRange)), plotxy31->yAxis2, SLOT(setRange(QCPRange)));
+  plotxy31->graph(0)->setLineStyle((QCPGraph::LineStyle)QCPGraph::lsLine);
+  plotxy31->graph(0)->selectionDecorator()->setPen(QPen(Qt::red));
+  plotxy31->graph(0)->setScatterStyle(QCPScatterStyle(QCPScatterStyle::ssCircle, 5));
+  plotxy31->graph(1)->setLineStyle((QCPGraph::LineStyle)QCPGraph::lsLine);
+  plotxy31->graph(1)->selectionDecorator()->setPen(QPen(Qt::blue));
+  plotxy31->graph(1)->setScatterStyle(QCPScatterStyle(QCPScatterStyle::ssCircle, 5));
+  plotxy31->setInteractions(QCP::iRangeDrag | QCP::iRangeZoom | QCP::iSelectPlottables);
 
   plotvelocities = new QCustomPlot;
   plotvelocities->addGraph(); plotvelocities->addGraph(); plotvelocities->addGraph();
@@ -300,10 +301,13 @@ void VideoPlayer::openPoint3() {
 }
 
 void VideoPlayer::drawCoordinates() {
-  const QRect availableGeometry = QApplication::desktop()->availableGeometry(plotcoordintates);
-  plotcoordintates->resize(availableGeometry.width() / 3, availableGeometry.height() / 2);
-  plotcoordintates->show();
+  const QRect availableGeometry21 = QApplication::desktop()->availableGeometry(plotxy21);
+  plotxy21->resize(availableGeometry21.width() / 3, availableGeometry21.height() / 2);
+  plotxy21->show();
 
+  const QRect availableGeometry31 = QApplication::desktop()->availableGeometry(plotxy31);
+  plotxy31->resize(availableGeometry31.width() / 3, availableGeometry31.height() / 2);
+  plotxy31->show();
 }
 
 void VideoPlayer::drawVelocities() {
@@ -329,12 +333,22 @@ void VideoPlayer::openFile() {
   if (fileDialog.exec() == QDialog::Accepted)
       setUrl(fileDialog.selectedUrls().constFirst());
 
-  plotcoordintates->graph(0)->data()->clear();
-  plotcoordintates->graph(1)->data()->clear();
-  plotcoordintates->graph(2)->data()->clear();
-  plotcoordintates->graph(3)->data()->clear();
-  plotcoordintates->graph(4)->data()->clear();
-  plotcoordintates->graph(5)->data()->clear();
+  plotxy21->graph(0)->data()->clear();
+  plotxy21->graph(1)->data()->clear();
+  
+  plotxy31->graph(0)->data()->clear();
+  plotxy31->graph(1)->data()->clear();
+
+  plotvelocities->graph(0)->data()->clear();
+  plotvelocities->graph(1)->data()->clear();
+  plotvelocities->graph(2)->data()->clear();
+  plotvelocities->graph(3)->data()->clear();
+  plotvelocities->graph(4)->data()->clear();
+  plotvelocities->graph(5)->data()->clear();
+  
+  plotangularvelocities->graph(0)->data()->clear();
+  plotangularvelocities->graph(1)->data()->clear();
+  plotangularvelocities->graph(2)->data()->clear();
 }
 
 void VideoPlayer::setUrl(const QUrl &url) {
@@ -441,10 +455,6 @@ void VideoPlayer::capturePoints(QPixmap &pix) {
   timelabel->setText((std::string("time: ") + std::to_string(time[iter])).c_str());
 
   red[iter] = std::pair<int, int>(mean_red[0]/mean_red[2], mean_red[1]/mean_red[2]);
-  plotcoordintates->graph(0)->addData(time[iter] * 10, red[iter].first);
-  plotcoordintates->graph(0)->rescaleAxes();
-  plotcoordintates->graph(1)->addData(time[iter] * 10, red[iter].second);
-  plotcoordintates->graph(1)->rescaleAxes();
 
   if(5 < red[iter].first && red[iter].first < image.width() - 5 &&
      5 < red[iter].second && red[iter].second < image.height() - 5) {
@@ -456,10 +466,6 @@ void VideoPlayer::capturePoints(QPixmap &pix) {
   }
 
   green[iter] = std::pair<int, int>(mean_green[0]/mean_green[2], mean_green[1]/mean_green[2]);
-  plotcoordintates->graph(2)->addData(time[iter] * 10, green[iter].first);
-  plotcoordintates->graph(2)->rescaleAxes();
-  plotcoordintates->graph(3)->addData(time[iter] * 10, green[iter].second);
-  plotcoordintates->graph(3)->rescaleAxes();
 
   if(5 < green[iter].first && green[iter].first < image.width() - 5 &&
      5 < green[iter].second && green[iter].second < image.height() - 5) {
@@ -471,10 +477,6 @@ void VideoPlayer::capturePoints(QPixmap &pix) {
   }
 
   blue[iter] = std::pair<int, int>(mean_blue[0]/mean_blue[2], mean_blue[1]/mean_blue[2]);
-  plotcoordintates->graph(4)->addData(time[iter] * 10, blue[iter].first);
-  plotcoordintates->graph(4)->rescaleAxes();
-  plotcoordintates->graph(5)->addData(time[iter] * 10, blue[iter].second);
-  plotcoordintates->graph(5)->rescaleAxes();
 
   if(5 < blue[iter].first && blue[iter].first < image.width() - 5 &&
      5 < blue[iter].second && blue[iter].second < image.height() - 5) {
@@ -485,7 +487,19 @@ void VideoPlayer::capturePoints(QPixmap &pix) {
     }
   }
 
-  plotcoordintates->replot();
+  plotxy21->graph(0)->addData(time[iter], green[iter].first - red[iter].first);
+  plotxy21->graph(0)->rescaleAxes();
+  plotxy21->graph(1)->addData(time[iter], green[iter].second - red[iter].second);
+  plotxy21->graph(1)->rescaleAxes();
+
+
+  plotxy31->graph(0)->addData(time[iter], blue[iter].first - red[iter].first);
+  plotxy31->graph(0)->rescaleAxes();
+  plotxy31->graph(1)->addData(time[iter], blue[iter].second - red[iter].second);
+  plotxy31->graph(1)->rescaleAxes();
+
+  plotxy21->replot();
+  plotxy31->replot();
   pix = QPixmap::fromImage(image);
 
   if(iter == 2) {
@@ -524,7 +538,7 @@ void VideoPlayer::capturePoints(QPixmap &pix) {
 
   plotvelocities->replot();
 
-  if(flag && iter % 2 == 0) {
+  if(flag) {
     getAngularVelocity();
   }
 
@@ -532,74 +546,204 @@ void VideoPlayer::capturePoints(QPixmap &pix) {
 }
 
 void VideoPlayer::getAngularVelocity() {
-  static double Cpast = std::numeric_limits<double>::max();
-
-  double CpastCalc = 0;
-  int count = 0;
+  static double omega1[3] = {0};
+  static double omega2[3] = {0};
+  static double omega3[3] = {0};
 
   double omegax = 0;
   double omegay = 0;
   double omegaz = 0;
   double dt = time[iter] - time[(iter + 2) % 3];
 
-  for(double fault21x = -10; fault21x <= 10; fault21x++) {
-    for(double fault21y = -10; fault21y <= 10; fault21y++) {
-      for(double fault31x = -10; fault31x <= 10; fault31x++) {
-        for(double fault31y = -10; fault31y <= 10; fault31y++) {
-          double x21 = green[iter].first - red[iter].first + fault21x, y21 = green[iter].second - red[iter].second + fault21y;
-          double x31 = blue[iter].first - red[iter].first + fault31x, y31 = blue[iter].second - red[iter].second + fault31y;
+  double x21 = green[iter].first - red[iter].first, y21 = green[iter].second - red[iter].second;
+  double x31 = blue[iter].first - red[iter].first, y31 = blue[iter].second - red[iter].second;
 
+  f(x21, y21, x31, y31, omegax, omegay, omegaz, dt);
 
-          double dx21 = (x21 - (green[(iter + 2) % 3].first - red[(iter + 2) % 3].first)) / dt;
-          double dy21 = (y21 - (green[(iter + 2) % 3].second - red[(iter + 2) % 3].second)) / dt;
-          double dx31 = (x31 - (blue[(iter + 2) % 3].first - red[(iter + 2) % 3].first)) / dt;
-          double dy31 = (y31 - (blue[(iter + 2) % 3].second - red[(iter + 2) % 3].second)) / dt;
+  omega1[iter] = (omegax + omega1[0] + omega1[1] + omega1[2]) / 4;
+  omega2[iter] = (omegay + omega2[0] + omega2[1] + omega2[2]) / 4;
+  omega3[iter] = (omegaz + omega3[0] + omega3[1] + omega3[2]) / 4;
 
-          if(abs(x21*y31 - x31*y21) < ALMOST_ZERO) {
-            continue;
-          }
-          double a = (y31 - y21)*(dx31*x31 + dy31*y31) / (x21*y31 - x31*y21);
-          double b = -((y31 - y21)*(dx21*x31 + dy21*y31) / (x21*y31 - x31*y21) + dx31);
-          double c = dx21;
+  plotangularvelocities->graph(0)->addData(time[iter], omega1[iter]);
+  plotangularvelocities->graph(1)->addData(time[iter], omega2[iter]);
+  plotangularvelocities->graph(2)->addData(time[iter], omega3[iter]);
+  plotangularvelocities->replot();
+}
 
-          if(pow(b, 2) - 4*a*c < 0 || abs(a) < ALMOST_ZERO) {
-            continue;
-          }
-          double Cpresent = (-b - pow((pow(b, 2) - 4*a*c), 0.5)) / (2*a);
+void VideoPlayer::f(double x1, double y1, double x2, double y2, double &omegax, double &omegay, double &omegaz, double dt) {
+  static double costh = 0, sinth = 0;
+  static double r1 = 0, r2 = 0;
 
-          if(Cpast == std::numeric_limits<double>::max()) {
-            CpastCalc += Cpresent;
-            count++;
-          } else {
-            double dCpresent = (Cpresent - Cpast) / dt;
-            if(abs(dCpresent) < ALMOST_ZERO)
-              continue;
+  if(r1 <= std::pow(x1*x1 + y1*y1, 0.5) && r2 <= std::pow(x2*x2 + y2*y2, 0.5)) {
 
-            double z31squared = (y21*(omegaz*x31 - dy31) - x21*(dx31 + omegaz*y31) +
-                                 y31*(omegaz*x31 - dy31) - x31*(dx31 + omegaz*y31)) / dCpresent;
-            if(z31squared < 0 || abs(z31squared) < ALMOST_ZERO)
-              continue;
+    r1 = std::pow(x1*x1 + y1*y1, 0.5);
+    r2 = std::pow(x2*x2 + y2*y2, 0.5);
+    costh = (x1*x2 + y1*y2) / (r1*r2);
+    sinth = std::pow(1 - costh*costh, 0.5);
+  }
 
-            double omega3 = (dx21*x31 + dy21*y31 - Cpresent*(dx31*x31 + dy31*y31)) / (x21*y31 - x31*y21);
-            omegaz += omega3;
-            omegax += ((omega3)*x31 - dy31) / pow(z31squared, 0.5);
-            omegay += (dx31 + (omega3)*y31) / pow(z31squared, 0.5);
+  static double alpha0 = 0;
+  static double beta0 = 0;
+  static double gamma0 = 0;
 
-            CpastCalc += Cpresent;
-            count++;
-          }
+  static double signa = 1;
+  static double signb = 1;
+  static double signg = 1;
+
+  double alpha = 0;
+  double beta = 0;
+  double gamma = 0;
+
+  double fault;
+  int count;
+
+  double step;
+  //alpha
+  for(int i = 0; i < 2; i++) {
+    step = 0.01;
+    step = (std::abs(std::abs(r1*std::cos(beta0)*std::cos(alpha0 + alpha)*x1 + r1*std::cos(beta0)*std::sin(alpha0 + alpha)*y1) - r1*std::pow(x1*x1 + y1*y1, 0.5)) -
+        std::abs(std::abs(r1*std::cos(beta0)*std::cos(alpha0 + alpha + step)*x1 + r1*std::cos(beta0)*std::sin(alpha0 + alpha + step)*y1) - r1*std::pow(x1*x1 + y1*y1, 0.5))) / step;
+    if(step != 0) {
+      switch(i) {
+        case 0:
+          step = 0.01*signa;
+          break;
+        case 1:
+          step = step*0.01 / std::abs(step);
+          break;
+      }
+    }
+
+    count = 0;
+    while(true) {
+      if(count > 500)
+        break;
+      fault = std::abs(std::abs(r1*std::cos(beta0)*std::cos(alpha0 + alpha)*x1 + r1*std::cos(beta0)*std::sin(alpha0 + alpha)*y1) - r1*std::pow(x1*x1 + y1*y1, 0.5));
+      if(std::abs(std::abs(r1*std::cos(beta0)*std::cos(alpha0 + alpha + step)*x1 + r1*std::cos(beta0)*std::sin(alpha0 + alpha + step)*y1) - r1*std::pow(x1*x1 + y1*y1, 0.5)) < fault) {
+        alpha += step;
+        step = (std::abs(std::abs(r1*std::cos(beta0)*std::cos(alpha0 + alpha)*x1 + r1*std::cos(beta0)*std::sin(alpha0 + alpha)*y1) - r1*std::pow(x1*x1 + y1*y1, 0.5)) -
+            std::abs(std::abs(r1*std::cos(beta0)*std::cos(alpha0 + alpha + step)*x1 + r1*std::cos(beta0)*std::sin(alpha0 + alpha + step)*y1) - r1*std::pow(x1*x1 + y1*y1, 0.5))) / step;
+        if(std::abs(step) != 0)
+          step = step*0.01 / std::abs(step);
+        count++;
+      } else {
+        step /= 2.0;
+      }
+
+      if(std::abs(step) < 0.0000001)
+        break;
+    }
+    if(alpha != 0)
+      break;
+  }
+
+  //beta
+  for(int i = 0; i < 2; i++) {
+    step = 0.01;
+    step = (std::abs(r1*std::cos(beta0 + beta)*std::cos(alpha0 + alpha) - x1) + std::abs(r1*std::cos(beta0 + beta)*std::sin(alpha0 + alpha) - y1) -
+            std::abs(r1*std::cos(beta0 + beta + step)*std::cos(alpha0 + alpha) - x1) - std::abs(r1*std::cos(beta0 + beta + step)*std::sin(alpha0 + alpha) - y1)) / step;
+    if(step != 0) {
+      if(step != 0) {
+        switch(i) {
+          case 0:
+            step = 0.01*signb;
+            break;
+          case 1:
+            step = step*0.01 / std::abs(step);
+            break;
         }
       }
     }
+
+    count = 0;
+    while(true) {
+      if(count > 500)
+        break;
+      fault = std::abs(r1*cos(beta0 + beta)*std::cos(alpha0 + alpha) - x1) + std::abs(r1*std::cos(beta0 + beta)*std::sin(alpha0 + alpha) - y1);
+        if(std::abs(r1*std::cos(beta0 + beta + step)*std::cos(alpha0 + alpha) - x1) + std::abs(r1*std::cos(beta0 + beta + step)*std::sin(alpha0 + alpha) - y1) < fault) {
+          beta += step;
+          step = (std::abs(r1*std::cos(beta0 + beta)*std::cos(alpha0 + alpha) - x1) + std::abs(r1*std::cos(beta0 + beta)*std::sin(alpha0 + alpha) - y1) -
+                  std::abs(r1*std::cos(beta0 + beta + step)*std::cos(alpha0 + alpha) - x1) - std::abs(r1*std::cos(beta0 + beta + step)*std::sin(alpha0 + alpha) - y1)) / step;
+          if(step != 0)
+            step = step*0.01/std::abs(step);
+          count++;
+        } else {
+          step /= 2.0;
+        }
+
+        if(std::abs(step) < 0.0000001)
+          break;
+    }
+    if(beta != 0)
+      break;
   }
 
-  if(count != 0)
-    Cpast = CpastCalc / count;
-  else
-    Cpast = std::numeric_limits<double>::max();
+  //gamma
+  for(int i = 0; i < 2; i++) {
+    step = 0.01;
+    step = (std::abs((r2*costh*std::cos(beta0 + beta) + r2*sinth*std::sin(beta0 + beta)*std::sin(gamma0 + gamma))*std::cos(alpha0 + alpha) -
+                r2*sinth*std::sin(alpha0 + alpha)*std::cos(gamma0 + gamma) - x2) +
+            std::abs((r2*costh*std::cos(beta0 + beta) + r2*sinth*std::sin(beta0 + beta)*std::sin(gamma0 + gamma))*std::sin(alpha0 + alpha) +
+                r2*sinth*std::cos(alpha0 + alpha)*std::cos(gamma0 + gamma) - y2) -
+            std::abs((r2*costh*std::cos(beta0 + beta) + r2*sinth*std::sin(beta0 + beta)*std::sin(gamma0 + gamma + step))*std::cos(alpha0 + alpha) -
+                r2*sinth*std::sin(alpha0 + alpha)*std::cos(gamma0 + gamma) - x2) -
+            std::abs((r2*costh*std::cos(beta0 + beta) + r2*sinth*std::sin(beta0 + beta)*std::sin(gamma0 + gamma))*std::sin(alpha0 + alpha) +
+                r2*sinth*std::cos(alpha0 + alpha)*std::cos(gamma0 + gamma + step) - y2)) / step;
+    if(step != 0) {
+      switch(i) {
+        case 0:
+          step = 0.01*signg;
+          break;
+        case 1:
+          step = step*0.01 / std::abs(step);
+          break;
+      }
+    }
 
-  plotangularvelocities->graph(0)->addData(time[iter], omegax / count);
-  plotangularvelocities->graph(1)->addData(time[iter], omegay / count);
-  plotangularvelocities->graph(2)->addData(time[iter], omegaz / count);
-  plotangularvelocities->replot();
+    count = 0;
+    while(true) {
+      if(count > 500)
+        break;
+      fault = std::abs(std::abs((r2*costh*std::cos(beta0 + beta) + r2*sinth*std::sin(beta0 + beta)*std::sin(gamma0 + gamma))*std::cos(alpha0 + alpha) -
+                  r2*sinth*std::sin(alpha0 + alpha)*std::cos(gamma0 + gamma) - x2) +
+              std::abs((r2*costh*std::cos(beta0 + beta) + r2*sinth*std::sin(beta0 + beta)*std::sin(gamma0 + gamma))*std::sin(alpha0 + alpha) +
+                  r2*sinth*std::cos(alpha0 + alpha)*std::cos(gamma0 + gamma) - y2));
+        if(std::abs(std::abs((r2*costh*std::cos(beta0 + beta) + r2*sinth*std::sin(beta0 + beta)*std::sin(gamma0 + gamma + step))*std::cos(alpha0 + alpha) -
+               r2*sinth*std::sin(alpha0 + alpha)*std::cos(gamma0 + gamma) - x2) -
+          std::abs((r2*costh*std::cos(beta0 + beta) + r2*sinth*std::sin(beta0 + beta)*std::sin(gamma0 + gamma))*std::sin(alpha0 + alpha) +
+               r2*sinth*std::cos(alpha0 + alpha)*std::cos(gamma0 + gamma + step) - y2)) < fault) {
+          gamma += step;
+          step = (std::abs((r2*costh*std::cos(beta0 + beta) + r2*sinth*std::sin(beta0 + beta)*std::sin(gamma0 + gamma))*std::cos(alpha0 + alpha) -
+                     r2*sinth*std::sin(alpha0 + alpha)*std::cos(gamma0 + gamma) - x2) +
+                  std::abs((r2*costh*std::cos(beta0 + beta) + r2*sinth*std::sin(beta0 + beta)*std::sin(gamma0 + gamma))*std::sin(alpha0 + alpha) +
+                      r2*sinth*std::cos(alpha0 + alpha)*std::cos(gamma0 + gamma) - y2) -
+                  std::abs((r2*costh*std::cos(beta0 + beta) + r2*sinth*std::sin(beta0 + beta)*std::sin(gamma0 + gamma + step))*std::cos(alpha0 + alpha) -
+                      r2*sinth*std::sin(alpha0 + alpha)*std::cos(gamma0 + gamma) - x2) -
+                  std::abs((r2*costh*std::cos(beta0 + beta) + r2*sinth*std::sin(beta0 + beta)*std::sin(gamma0 + gamma))*std::sin(alpha0 + alpha) +
+                     r2*sinth*std::cos(alpha0 + alpha)*std::cos(gamma0 + gamma + step) - y2)) / step;
+          if(std::abs(step) != 0)
+            step = step*0.01/std::abs(step);
+          count++;
+        } else {
+          step /= 2.0;
+        }
+
+        if(std::abs(step) < 0.0000001)
+          break;
+    }
+    if(gamma != 0)
+      break;
+  }
+  omegax = gamma*std::cos(beta0 + beta)*std::cos(alpha0 + alpha) / dt - std::sin(alpha0 + alpha)*beta / dt;
+  omegay = gamma*std::cos(beta0 + beta)*std::sin(alpha0 + alpha) / dt + std::cos(alpha0 + alpha)*beta / dt;
+  omegaz = alpha / dt - std::sin(beta0 + beta)*gamma / dt;
+
+  if(alpha != 0)
+    signa = alpha / std::abs(alpha);
+  if(beta != 0)
+    signb = beta / std::abs(beta);
+  if(gamma != 0)
+    signg = gamma / std::abs(gamma);
+
+  alpha0 += alpha; beta0 += beta; gamma0 += gamma;
 }

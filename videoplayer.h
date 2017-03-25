@@ -46,6 +46,7 @@ Q_SIGNALS:
 private:
     void capturePoints(QPixmap &pix);
     void getAngularVelocity();
+    void f(double x1, double y1, double x2, double y2, double &omegax, double &omegay, double &omegaz, double dt);
 
     void drawCoordinates();
     void drawVelocities();
@@ -58,7 +59,8 @@ private:
     QLabel *imagelabel;
     QLabel *timelabel;
     QLabel *coordinatelabel;
-    QCustomPlot *plotcoordintates;
+    QCustomPlot *plotxy21;
+    QCustomPlot *plotxy31;
     QCustomPlot *plotvelocities;
     QCustomPlot *plotangularvelocities;
     myQAbstractVideoSurface *surface;
