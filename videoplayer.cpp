@@ -558,6 +558,10 @@ void VideoPlayer::getAngularVelocity() {
   double x21 = green[iter].first - red[iter].first, y21 = green[iter].second - red[iter].second;
   double x31 = blue[iter].first - red[iter].first, y31 = blue[iter].second - red[iter].second;
 
+  //f(std::cos(time[iter]), 0, 0, 1, omegax, omegay, omegaz, dt);
+  //f(1, 0, 0, std::cos(time[iter]), omegax, omegay, omegaz, dt);
+  //f(std::cos(time[iter]), std::sin(time[iter]), std::cos(3.14159265 / 2.0 + time[iter]), std::sin(3.14159265 / 2.0 + time[iter]), omegax, omegay, omegaz, dt);
+  //f(std::cos(time[iter])*std::cos(time[iter] / 2.0), std::sin(time[iter])*std::cos(time[iter] / 2.0), std::cos(3.14159265 / 2.0 + time[iter]), std::sin(3.14159265 / 2.0 + time[iter]), omegax, omegay, omegaz, dt);
   f(x21, y21, x31, y31, omegax, omegay, omegaz, dt);
 
   omega1[iter] = (omegax + omega1[0] + omega1[1] + omega1[2]) / 4;
@@ -630,7 +634,7 @@ void VideoPlayer::f(double x1, double y1, double x2, double y2, double &omegax, 
         step /= 2.0;
       }
 
-      if(std::abs(step) < 0.0000001)
+      if(std::abs(step) < 0.00000001)
         break;
     }
     if(alpha != 0)
@@ -671,7 +675,7 @@ void VideoPlayer::f(double x1, double y1, double x2, double y2, double &omegax, 
           step /= 2.0;
         }
 
-        if(std::abs(step) < 0.0000001)
+        if(std::abs(step) < 0.00000001)
           break;
     }
     if(beta != 0)
@@ -686,8 +690,8 @@ void VideoPlayer::f(double x1, double y1, double x2, double y2, double &omegax, 
             std::abs((r2*costh*std::cos(beta0 + beta) + r2*sinth*std::sin(beta0 + beta)*std::sin(gamma0 + gamma))*std::sin(alpha0 + alpha) +
                 r2*sinth*std::cos(alpha0 + alpha)*std::cos(gamma0 + gamma) - y2) -
             std::abs((r2*costh*std::cos(beta0 + beta) + r2*sinth*std::sin(beta0 + beta)*std::sin(gamma0 + gamma + step))*std::cos(alpha0 + alpha) -
-                r2*sinth*std::sin(alpha0 + alpha)*std::cos(gamma0 + gamma) - x2) -
-            std::abs((r2*costh*std::cos(beta0 + beta) + r2*sinth*std::sin(beta0 + beta)*std::sin(gamma0 + gamma))*std::sin(alpha0 + alpha) +
+                r2*sinth*std::sin(alpha0 + alpha)*std::cos(gamma0 + gamma + step) - x2) -
+            std::abs((r2*costh*std::cos(beta0 + beta) + r2*sinth*std::sin(beta0 + beta)*std::sin(gamma0 + gamma + step))*std::sin(alpha0 + alpha) +
                 r2*sinth*std::cos(alpha0 + alpha)*std::cos(gamma0 + gamma + step) - y2)) / step;
     if(step != 0) {
       switch(i) {
@@ -709,8 +713,8 @@ void VideoPlayer::f(double x1, double y1, double x2, double y2, double &omegax, 
               std::abs((r2*costh*std::cos(beta0 + beta) + r2*sinth*std::sin(beta0 + beta)*std::sin(gamma0 + gamma))*std::sin(alpha0 + alpha) +
                   r2*sinth*std::cos(alpha0 + alpha)*std::cos(gamma0 + gamma) - y2));
         if(std::abs(std::abs((r2*costh*std::cos(beta0 + beta) + r2*sinth*std::sin(beta0 + beta)*std::sin(gamma0 + gamma + step))*std::cos(alpha0 + alpha) -
-               r2*sinth*std::sin(alpha0 + alpha)*std::cos(gamma0 + gamma) - x2) -
-          std::abs((r2*costh*std::cos(beta0 + beta) + r2*sinth*std::sin(beta0 + beta)*std::sin(gamma0 + gamma))*std::sin(alpha0 + alpha) +
+               r2*sinth*std::sin(alpha0 + alpha)*std::cos(gamma0 + gamma + step) - x2) -
+          std::abs((r2*costh*std::cos(beta0 + beta) + r2*sinth*std::sin(beta0 + beta)*std::sin(gamma0 + gamma + step))*std::sin(alpha0 + alpha) +
                r2*sinth*std::cos(alpha0 + alpha)*std::cos(gamma0 + gamma + step) - y2)) < fault) {
           gamma += step;
           step = (std::abs((r2*costh*std::cos(beta0 + beta) + r2*sinth*std::sin(beta0 + beta)*std::sin(gamma0 + gamma))*std::cos(alpha0 + alpha) -
@@ -718,8 +722,8 @@ void VideoPlayer::f(double x1, double y1, double x2, double y2, double &omegax, 
                   std::abs((r2*costh*std::cos(beta0 + beta) + r2*sinth*std::sin(beta0 + beta)*std::sin(gamma0 + gamma))*std::sin(alpha0 + alpha) +
                       r2*sinth*std::cos(alpha0 + alpha)*std::cos(gamma0 + gamma) - y2) -
                   std::abs((r2*costh*std::cos(beta0 + beta) + r2*sinth*std::sin(beta0 + beta)*std::sin(gamma0 + gamma + step))*std::cos(alpha0 + alpha) -
-                      r2*sinth*std::sin(alpha0 + alpha)*std::cos(gamma0 + gamma) - x2) -
-                  std::abs((r2*costh*std::cos(beta0 + beta) + r2*sinth*std::sin(beta0 + beta)*std::sin(gamma0 + gamma))*std::sin(alpha0 + alpha) +
+                      r2*sinth*std::sin(alpha0 + alpha)*std::cos(gamma0 + gamma + step) - x2) -
+                  std::abs((r2*costh*std::cos(beta0 + beta) + r2*sinth*std::sin(beta0 + beta)*std::sin(gamma0 + gamma + step))*std::sin(alpha0 + alpha) +
                      r2*sinth*std::cos(alpha0 + alpha)*std::cos(gamma0 + gamma + step) - y2)) / step;
           if(std::abs(step) != 0)
             step = step*0.01/std::abs(step);
@@ -728,7 +732,7 @@ void VideoPlayer::f(double x1, double y1, double x2, double y2, double &omegax, 
           step /= 2.0;
         }
 
-        if(std::abs(step) < 0.0000001)
+        if(std::abs(step) < 0.00000001)
           break;
     }
     if(gamma != 0)
@@ -738,11 +742,11 @@ void VideoPlayer::f(double x1, double y1, double x2, double y2, double &omegax, 
   omegay = gamma*std::cos(beta0 + beta)*std::sin(alpha0 + alpha) / dt + std::cos(alpha0 + alpha)*beta / dt;
   omegaz = alpha / dt - std::sin(beta0 + beta)*gamma / dt;
 
-  if(alpha != 0)
+  if(std::abs(alpha) >= 0.01)
     signa = alpha / std::abs(alpha);
-  if(beta != 0)
+  if(std::abs(beta) >= 0.01)
     signb = beta / std::abs(beta);
-  if(gamma != 0)
+  if(std::abs(gamma) >= 0.01)
     signg = gamma / std::abs(gamma);
 
   alpha0 += alpha; beta0 += beta; gamma0 += gamma;
