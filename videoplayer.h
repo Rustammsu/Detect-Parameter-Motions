@@ -4,6 +4,7 @@
 
 #include "videowidgetsurface.h"
 #include "qcustomplot.h"
+#include "myutility.h"
 
 #include <qmediaplayer.h>
 
@@ -45,12 +46,10 @@ Q_SIGNALS:
 
 private:
     void capturePoints(QPixmap &pix);
-    void getAngularVelocity();
-    void f(double x1, double y1, double x2, double y2, double &omegax, double &omegay, double &omegaz, double dt);
-
     void drawCoordinates();
-    void drawVelocities();
     void drawAngularVelocities();
+    void approximateClicked();
+    void testfunction();
 
     QMediaPlayer mediaPlayer;
     QAbstractButton *playButton;
@@ -61,19 +60,23 @@ private:
     QLabel *coordinatelabel;
     QCustomPlot *plotxy21;
     QCustomPlot *plotxy31;
-    QCustomPlot *plotvelocities;
     QCustomPlot *plotangularvelocities;
+    QCustomPlot *plotxy21Approximation;
+    QCustomPlot *plotxy31Approximation;
+    QCustomPlot *plotangularvelocitiesApproximation;
     myQAbstractVideoSurface *surface;
 
     QColor point1Color;
     QColor point2Color;
     QColor point3Color;
 
-    std::pair<int, int> red[3];
-    std::pair<int, int> green[3];
-    std::pair<int, int> blue[3];
-    double time[3];
-    int iter;
+    std::vector<PointData>red;
+    std::vector<PointData>green;
+    std::vector<PointData>blue;
+
+    Triangle pixelTriangle;
+    Triangle approximatePixelTriangle;
+    Approximator greenredApproximator, blueredApproximator;
 };
 
 #endif

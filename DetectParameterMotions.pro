@@ -15,12 +15,14 @@ TEMPLATE = app
 SOURCES += main.cpp\
     videoplayer.cpp \
     videowidgetsurface.cpp \
-    qcustomplot.cpp
+    qcustomplot.cpp \
+    myutility.cpp
 
 HEADERS  += \
     videoplayer.h \
     videowidgetsurface.h \
-    qcustomplot.h
+    qcustomplot.h \
+    myutility.h
 
 target.path = $$[QT_INSTALL_PLUGINS]/multimediawidgets/videowidget
 
