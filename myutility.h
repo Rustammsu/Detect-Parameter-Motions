@@ -23,6 +23,8 @@ public:
   double getOmegaX();
   double getOmegaY();
   double getOmegaZ();
+  double getR1();
+  double getR2();
 
 private:
   double r1, r2;

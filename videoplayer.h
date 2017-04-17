@@ -49,7 +49,7 @@ private:
     void drawCoordinates();
     void drawAngularVelocities();
     void approximateClicked();
-    void testfunction();
+    void testFunction();
 
     QMediaPlayer mediaPlayer;
     QAbstractButton *playButton;
@@ -64,6 +64,7 @@ private:
     QCustomPlot *plotxy21Approximation;
     QCustomPlot *plotxy31Approximation;
     QCustomPlot *plotangularvelocitiesApproximation;
+    QCustomPlot *plotshapesofVectors;
     myQAbstractVideoSurface *surface;
 
     QColor point1Color;

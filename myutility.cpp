@@ -33,6 +33,14 @@ void Triangle::setAdaptive(bool flag) {
   adaptive = flag;
 }
 
+double Triangle::getR1() {
+  return r1;
+}
+
+double Triangle::getR2() {
+  return r2;
+}
+
 void Triangle::rotate(double x1, double y1, double x2, double y2, double dt) {
 
   if(adaptive && r1 <= std::pow(x1*x1 + y1*y1, 0.5) && r2 <= std::pow(x2*x2 + y2*y2, 0.5)) {
@@ -51,20 +59,13 @@ void Triangle::rotate(double x1, double y1, double x2, double y2, double dt) {
 
   double step;
   //alpha
-  for(int i = 1; i < 2; i++) {
+  {
     step = 0.001;
     step = (std::abs(std::abs(r1*std::cos(beta0)*std::cos(alpha0 + alpha)*x1 + r1*std::cos(beta0)*std::sin(alpha0 + alpha)*y1) - r1*std::pow(x1*x1 + y1*y1, 0.5)) -
         std::abs(std::abs(r1*std::cos(beta0)*std::cos(alpha0 + alpha + step)*x1 + r1*std::cos(beta0)*std::sin(alpha0 + alpha + step)*y1) - r1*std::pow(x1*x1 + y1*y1, 0.5))) / step;
 
-    switch(i) {
-      case 0:
-        step = 0.1*signa;
-        break;
-      case 1:
-        if(step != 0)
-          step = step*0.001 / std::abs(step);
-        break;
-    }
+    if(step != 0)
+      step = step*0.001 / std::abs(step);
 
     count = 0;
     while(true) {
@@ -85,70 +86,62 @@ void Triangle::rotate(double x1, double y1, double x2, double y2, double dt) {
       if(std::abs(step) < 0.00000001)
         break;
     }
-    if(alpha != 0)
-      break;
   }
 
   //beta
-  if(int(beta0 / M_PI)*M_PI - M_PI*0.05 <= beta0 &&
-     beta0 <= int(beta0 / M_PI)*M_PI + M_PI*0.05 && signb != 0) {
-    beta = signb;
-  }
+  {
+    if(int(beta0 / M_PI)*M_PI - M_PI*0.05 <= beta0 &&
+       beta0 <= int(beta0 / M_PI)*M_PI + M_PI*0.05 && signb != 0) {
+      beta = signb;
+    }
 
-  if(int(beta0 / M_PI + 1)*M_PI - M_PI*0.05 <= beta0 &&
-     beta0 <= int(beta0 / M_PI + 1)*M_PI + M_PI*0.05 && signb != 0) {
-    beta = signb;
-  }
+    if(int(beta0 / M_PI + 1)*M_PI - M_PI*0.05 <= beta0 &&
+       beta0 <= int(beta0 / M_PI + 1)*M_PI + M_PI*0.05 && signb != 0) {
+      beta = signb;
+    }
 
-  for(int i = 1; i < 2; i++) {
     step = 0.001;
     step = (std::abs(r1*std::cos(beta0 + beta)*std::cos(alpha0 + alpha) - x1) + std::abs(r1*std::cos(beta0 + beta)*std::sin(alpha0 + alpha) - y1) -
             std::abs(r1*std::cos(beta0 + beta + step)*std::cos(alpha0 + alpha) - x1) - std::abs(r1*std::cos(beta0 + beta + step)*std::sin(alpha0 + alpha) - y1)) / step;
-    if(step != 0) {
-      switch(i) {
-        case 0:
-          step = 0.1*signb;
-          break;
-        case 1:
-          step = step*0.001 / std::abs(step);
-          break;
-      }
-    }
+
+    if(step != 0)
+      step = step*0.001 / std::abs(step);
+
 
     count = 0;
     while(true) {
       if(count > 1000)
         break;
       fault = std::abs(r1*cos(beta0 + beta)*std::cos(alpha0 + alpha) - x1) + std::abs(r1*std::cos(beta0 + beta)*std::sin(alpha0 + alpha) - y1);
-        if(std::abs(r1*std::cos(beta0 + beta + step)*std::cos(alpha0 + alpha) - x1) + std::abs(r1*std::cos(beta0 + beta + step)*std::sin(alpha0 + alpha) - y1) < fault) {
-          beta += step;
-          step = (std::abs(r1*std::cos(beta0 + beta)*std::cos(alpha0 + alpha) - x1) + std::abs(r1*std::cos(beta0 + beta)*std::sin(alpha0 + alpha) - y1) -
-                  std::abs(r1*std::cos(beta0 + beta + step)*std::cos(alpha0 + alpha) - x1) - std::abs(r1*std::cos(beta0 + beta + step)*std::sin(alpha0 + alpha) - y1)) / step;
-          if(step != 0)
-            step = step*0.001/std::abs(step);
-          count++;
-        } else {
-          step /= 2.0;
-        }
 
-        if(std::abs(step) < 0.00000001)
-          break;
+      if(std::abs(r1*std::cos(beta0 + beta + step)*std::cos(alpha0 + alpha) - x1) + std::abs(r1*std::cos(beta0 + beta + step)*std::sin(alpha0 + alpha) - y1) < fault) {
+        beta += step;
+        step = (std::abs(r1*std::cos(beta0 + beta)*std::cos(alpha0 + alpha) - x1) + std::abs(r1*std::cos(beta0 + beta)*std::sin(alpha0 + alpha) - y1) -
+                std::abs(r1*std::cos(beta0 + beta + step)*std::cos(alpha0 + alpha) - x1) - std::abs(r1*std::cos(beta0 + beta + step)*std::sin(alpha0 + alpha) - y1)) / step;
+        if(step != 0)
+          step = step*0.001/std::abs(step);
+        count++;
+      } else {
+        step /= 2.0;
+      }
+
+      if(std::abs(step) < 0.00000001)
+        break;
     }
-    if(beta != 0)
-      break;
   }
 
   //gamma
-  if(int(gamma0 / M_PI)*M_PI - M_PI*0.05 <= gamma0 &&
-     gamma0 <= int(gamma0 / M_PI)*M_PI + M_PI*0.05 && signg != 0) {
-    gamma = signg;
-  }
+  {
+    if(int(gamma0 / M_PI)*M_PI - M_PI*0.05 <= gamma0 &&
+       gamma0 <= int(gamma0 / M_PI)*M_PI + M_PI*0.05 && signg != 0) {
+      gamma = signg;
+    }
 
-  if(int(gamma0 / M_PI + 1)*M_PI - M_PI*0.05 <= gamma0 &&
-     gamma0 <= int(gamma0 / M_PI + 1)*M_PI + M_PI*0.05 && signg != 0) {
-    gamma = signg;
-  }
-  for(int i = 1; i < 2; i++) {
+    if(int(gamma0 / M_PI + 1)*M_PI - M_PI*0.05 <= gamma0 &&
+       gamma0 <= int(gamma0 / M_PI + 1)*M_PI + M_PI*0.05 && signg != 0) {
+      gamma = signg;
+    }
+
     step = 0.001;
     step = (std::abs((r2*costh*std::cos(beta0 + beta) + r2*sinth*std::sin(beta0 + beta)*std::sin(gamma0 + gamma))*std::cos(alpha0 + alpha) -
                 r2*sinth*std::sin(alpha0 + alpha)*std::cos(gamma0 + gamma) - x2) +
@@ -159,15 +152,8 @@ void Triangle::rotate(double x1, double y1, double x2, double y2, double dt) {
             std::abs((r2*costh*std::cos(beta0 + beta) + r2*sinth*std::sin(beta0 + beta)*std::sin(gamma0 + gamma + step))*std::sin(alpha0 + alpha) +
                 r2*sinth*std::cos(alpha0 + alpha)*std::cos(gamma0 + gamma + step) - y2)) / step;
 
-    switch(i) {
-      case 0:
-        step = 0.1*signg;
-        break;
-      case 1:
-        if(step != 0)
-          step = step*0.001 / std::abs(step);
-        break;
-    }
+    if(step != 0)
+      step = step*0.001 / std::abs(step);
 
     count = 0;
     while(true) {
@@ -177,31 +163,30 @@ void Triangle::rotate(double x1, double y1, double x2, double y2, double dt) {
                   r2*sinth*std::sin(alpha0 + alpha)*std::cos(gamma0 + gamma) - x2) +
               std::abs((r2*costh*std::cos(beta0 + beta) + r2*sinth*std::sin(beta0 + beta)*std::sin(gamma0 + gamma))*std::sin(alpha0 + alpha) +
                   r2*sinth*std::cos(alpha0 + alpha)*std::cos(gamma0 + gamma) - y2));
-        if(std::abs(std::abs((r2*costh*std::cos(beta0 + beta) + r2*sinth*std::sin(beta0 + beta)*std::sin(gamma0 + gamma + step))*std::cos(alpha0 + alpha) -
-               r2*sinth*std::sin(alpha0 + alpha)*std::cos(gamma0 + gamma + step) - x2) -
-          std::abs((r2*costh*std::cos(beta0 + beta) + r2*sinth*std::sin(beta0 + beta)*std::sin(gamma0 + gamma + step))*std::sin(alpha0 + alpha) +
-               r2*sinth*std::cos(alpha0 + alpha)*std::cos(gamma0 + gamma + step) - y2)) < fault) {
-          gamma += step;
-          step = (std::abs((r2*costh*std::cos(beta0 + beta) + r2*sinth*std::sin(beta0 + beta)*std::sin(gamma0 + gamma))*std::cos(alpha0 + alpha) -
-                     r2*sinth*std::sin(alpha0 + alpha)*std::cos(gamma0 + gamma) - x2) +
-                  std::abs((r2*costh*std::cos(beta0 + beta) + r2*sinth*std::sin(beta0 + beta)*std::sin(gamma0 + gamma))*std::sin(alpha0 + alpha) +
-                      r2*sinth*std::cos(alpha0 + alpha)*std::cos(gamma0 + gamma) - y2) -
-                  std::abs((r2*costh*std::cos(beta0 + beta) + r2*sinth*std::sin(beta0 + beta)*std::sin(gamma0 + gamma + step))*std::cos(alpha0 + alpha) -
-                      r2*sinth*std::sin(alpha0 + alpha)*std::cos(gamma0 + gamma + step) - x2) -
-                  std::abs((r2*costh*std::cos(beta0 + beta) + r2*sinth*std::sin(beta0 + beta)*std::sin(gamma0 + gamma + step))*std::sin(alpha0 + alpha) +
-                     r2*sinth*std::cos(alpha0 + alpha)*std::cos(gamma0 + gamma + step) - y2)) / step;
-          if(std::abs(step) != 0)
-            step = step*0.001/std::abs(step);
-          count++;
-        } else {
-          step /= 2.0;
-        }
 
-        if(std::abs(step) < 0.00000001)
-          break;
+      if(std::abs(std::abs((r2*costh*std::cos(beta0 + beta) + r2*sinth*std::sin(beta0 + beta)*std::sin(gamma0 + gamma + step))*std::cos(alpha0 + alpha) -
+             r2*sinth*std::sin(alpha0 + alpha)*std::cos(gamma0 + gamma + step) - x2) -
+        std::abs((r2*costh*std::cos(beta0 + beta) + r2*sinth*std::sin(beta0 + beta)*std::sin(gamma0 + gamma + step))*std::sin(alpha0 + alpha) +
+             r2*sinth*std::cos(alpha0 + alpha)*std::cos(gamma0 + gamma + step) - y2)) < fault) {
+        gamma += step;
+        step = (std::abs((r2*costh*std::cos(beta0 + beta) + r2*sinth*std::sin(beta0 + beta)*std::sin(gamma0 + gamma))*std::cos(alpha0 + alpha) -
+                   r2*sinth*std::sin(alpha0 + alpha)*std::cos(gamma0 + gamma) - x2) +
+                std::abs((r2*costh*std::cos(beta0 + beta) + r2*sinth*std::sin(beta0 + beta)*std::sin(gamma0 + gamma))*std::sin(alpha0 + alpha) +
+                    r2*sinth*std::cos(alpha0 + alpha)*std::cos(gamma0 + gamma) - y2) -
+                std::abs((r2*costh*std::cos(beta0 + beta) + r2*sinth*std::sin(beta0 + beta)*std::sin(gamma0 + gamma + step))*std::cos(alpha0 + alpha) -
+                    r2*sinth*std::sin(alpha0 + alpha)*std::cos(gamma0 + gamma + step) - x2) -
+                std::abs((r2*costh*std::cos(beta0 + beta) + r2*sinth*std::sin(beta0 + beta)*std::sin(gamma0 + gamma + step))*std::sin(alpha0 + alpha) +
+                   r2*sinth*std::cos(alpha0 + alpha)*std::cos(gamma0 + gamma + step) - y2)) / step;
+        if(std::abs(step) != 0)
+          step = step*0.001/std::abs(step);
+        count++;
+      } else {
+          step /= 2.0;
+      }
+
+      if(std::abs(step) < 0.00000001)
+        break;
     }
-    if(gamma != 0)
-      break;
   }
 
   currentIndex = (currentIndex + 1) % 10;

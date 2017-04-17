@@ -9,6 +9,7 @@
 #include <cmath>
 #include <limits>
 #include <algorithm>
+#include <thread>
 
 #define ALMOST_ZERO 0.00001
 
@@ -64,7 +65,7 @@ VideoPlayer::VideoPlayer(QWidget *parent)
   connect(approximateButton, &QAbstractButton::clicked, this, &VideoPlayer::approximateClicked);
 
   QAbstractButton *TestButton = new QPushButton(tr("test"));
-  connect(TestButton, &QAbstractButton::clicked, this, &VideoPlayer::testfunction);
+  connect(TestButton, &QAbstractButton::clicked, this, &VideoPlayer::testFunction);
 
   QBoxLayout *pointLayout = new QHBoxLayout;
   pointLayout->setMargin(0);
@@ -246,6 +247,35 @@ VideoPlayer::VideoPlayer(QWidget *parent)
   plotangularvelocitiesApproximation->graph(2)->setScatterStyle(QCPScatterStyle(QCPScatterStyle::ssCircle, 5));
   plotangularvelocitiesApproximation->setInteractions(QCP::iRangeDrag | QCP::iRangeZoom | QCP::iSelectPlottables);
 
+  plotshapesofVectors = new QCustomPlot;
+  plotshapesofVectors->addGraph(); plotshapesofVectors->addGraph(); plotshapesofVectors->addGraph();
+  plotshapesofVectors->addGraph();
+  plotshapesofVectors->graph(0)->setPen(QPen(Qt::red));
+  plotshapesofVectors->graph(1)->setPen(QPen(Qt::green));
+  plotshapesofVectors->graph(2)->setPen(QPen(Qt::blue));
+  plotshapesofVectors->graph(3)->setPen(QPen(Qt::black));
+  plotshapesofVectors->xAxis2->setVisible(true);
+  plotshapesofVectors->xAxis2->setTickLabels(false);
+  plotshapesofVectors->yAxis2->setVisible(true);
+  plotshapesofVectors->yAxis2->setTickLabels(false);
+  connect(plotshapesofVectors->xAxis, SIGNAL(rangeChanged(QCPRange)),
+          plotshapesofVectors->xAxis2, SLOT(setRange(QCPRange)));
+  connect(plotshapesofVectors->yAxis, SIGNAL(rangeChanged(QCPRange)),
+          plotshapesofVectors->yAxis2, SLOT(setRange(QCPRange)));
+  plotshapesofVectors->graph(0)->setLineStyle((QCPGraph::LineStyle)QCPGraph::lsLine);
+  plotshapesofVectors->graph(0)->selectionDecorator()->setPen(QPen(Qt::red));
+  plotshapesofVectors->graph(0)->setScatterStyle(QCPScatterStyle(QCPScatterStyle::ssCircle, 5));
+  plotshapesofVectors->graph(1)->setLineStyle((QCPGraph::LineStyle)QCPGraph::lsLine);
+  plotshapesofVectors->graph(1)->selectionDecorator()->setPen(QPen(Qt::green));
+  plotshapesofVectors->graph(1)->setScatterStyle(QCPScatterStyle(QCPScatterStyle::ssCircle, 5));
+  plotshapesofVectors->graph(2)->setLineStyle((QCPGraph::LineStyle)QCPGraph::lsLine);
+  plotshapesofVectors->graph(2)->selectionDecorator()->setPen(QPen(Qt::blue));
+  plotshapesofVectors->graph(2)->setScatterStyle(QCPScatterStyle(QCPScatterStyle::ssCircle, 5));
+  plotshapesofVectors->graph(3)->setLineStyle((QCPGraph::LineStyle)QCPGraph::lsLine);
+  plotshapesofVectors->graph(3)->selectionDecorator()->setPen(QPen(Qt::black));
+  plotshapesofVectors->graph(3)->setScatterStyle(QCPScatterStyle(QCPScatterStyle::ssCircle, 5));
+  plotshapesofVectors->setInteractions(QCP::iRangeDrag | QCP::iRangeZoom | QCP::iSelectPlottables);
+
   connect(&mediaPlayer, &QMediaPlayer::stateChanged,
           this, &VideoPlayer::mediaStateChanged);
   connect(&mediaPlayer, &QMediaPlayer::positionChanged, this, &VideoPlayer::positionChanged);
@@ -372,6 +402,11 @@ void VideoPlayer::approximateClicked() {
   plotangularvelocitiesApproximation->graph(1)->data()->clear();
   plotangularvelocitiesApproximation->graph(2)->data()->clear();
 
+  plotshapesofVectors->graph(0)->data()->clear();
+  plotshapesofVectors->graph(1)->data()->clear();
+  plotshapesofVectors->graph(2)->data()->clear();
+  plotshapesofVectors->graph(3)->data()->clear();
+
   double t1, t2;
   t1 = QInputDialog::getDouble(0, "Input t1", "Input t1");
   t2 = QInputDialog::getDouble(0, "Input t2", "Input t2");
@@ -446,9 +481,49 @@ void VideoPlayer::approximateClicked() {
     plotangularvelocitiesApproximation->rescaleAxes();
     plotangularvelocitiesApproximation->replot();
   }
+  
+  //high
+  availableGeometry = QApplication::desktop()->availableGeometry(plotshapesofVectors);
+  plotshapesofVectors->resize(availableGeometry.width() / 3, availableGeometry.height() / 2);
+  plotshapesofVectors->show();
+  for(t = t1; t <= t2; t += 0.01) {
+    double x21 = greenredApproximator.getX(t), y21 = greenredApproximator.getY(t),
+        dx21 = (greenredApproximator.getX(t + 0.001) - greenredApproximator.getX(t)) / 0.001, 
+        dy21 = (greenredApproximator.getY(t + 0.001) - greenredApproximator.getY(t)) / 0.001;
+    double x31 = blueredApproximator.getX(t), y31 = blueredApproximator.getY(t),
+        dx31 = (blueredApproximator.getX(t + 0.001) - blueredApproximator.getX(t)) / 0.001, 
+        dy31 = (blueredApproximator.getY(t + 0.001) - blueredApproximator.getY(t)) / 0.001;
+    double a = dx31*x31 + dy31*y31, b = -(dx21*x31 + dy21*y31 + dx31*x21 + dy31*y21), c = dx21*x21 + dy21*y21;
+    
+    if(std::abs(a) > 5 && (x21*y31 - y21*x31) > 5) {
+      double x21p = greenredApproximator.getX(t - 0.001), y21p = greenredApproximator.getY(t - 0.001),
+          dx21p = (greenredApproximator.getX(t) - greenredApproximator.getX(t - 0.001)) / 0.001,
+          dy21p = (greenredApproximator.getY(t) - greenredApproximator.getY(t - 0.001)) / 0.001;
+      double x31p = blueredApproximator.getX(t - 0.001), y31p = blueredApproximator.getY(t - 0.001),
+          dx31p = (blueredApproximator.getX(t) - blueredApproximator.getX(t - 0.001)) / 0.001,
+          dy31p = (blueredApproximator.getY(t) - blueredApproximator.getY(t - 0.001)) / 0.001;
+      double ap = dx31p*x31p + dy31p*y31p, bp = -(dx21p*x31p + dy21p*y31p + dx31p*x21p + dy31p*y21p), cp = dx21p*x21p + dy21p*y21p;
+
+      double A = (-b + std::pow(std::pow(b, 2) - 4*a*c, 0.5)) / (2*a);
+      double Ap = (-bp + std::pow(std::pow(bp, 2) - 4*ap*cp, 0.5)) / (2*ap);
+      double dA = (A - Ap) / 0.001;
+      double omega3 = (dx21*x31 + dy21*y31 - A*a) / (x21*y31 - y21*x31);
+      double z31 = std::pow(((omega3*x31 - dy31)*(y21 - A*y31) - (dx31 + omega3*y31)*(x21 - A*x31)) / dA, 0.5);
+      double z21 = A*z31;
+
+      plotshapesofVectors->graph(0)->addData(t, std::pow(x21*x21 + y21*y21 + z21*z21, 0.5));
+      plotshapesofVectors->graph(1)->addData(t, std::pow(x31*x31 + y31*y31 + z31*z31, 0.5));
+      plotshapesofVectors->graph(2)->addData(t, approximatePixelTriangle.getR1());
+      plotshapesofVectors->graph(3)->addData(t, approximatePixelTriangle.getR2());
+      plotshapesofVectors->rescaleAxes();
+      plotshapesofVectors->replot();
+    } else {
+      double A = (-b + std::pow(std::pow(b, 2) - 4*a*c, 0.5)) / (2*c);
+    }
+  }
 }
 
-void VideoPlayer::testfunction() {
+void VideoPlayer::testFunction() {
   plotangularvelocities->graph(0)->data()->clear();
   plotangularvelocities->graph(1)->data()->clear();
   plotangularvelocities->graph(2)->data()->clear();
