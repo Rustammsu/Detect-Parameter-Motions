@@ -464,28 +464,34 @@ void VideoPlayer::approximateClicked() {
     plotxy31Approximation->rescaleAxes();
     plotxy31Approximation->replot();
   }
-
+/*
   availableGeometry = QApplication::desktop()->availableGeometry(plotangularvelocitiesApproximation);
   plotangularvelocitiesApproximation->resize(availableGeometry.width() / 3, availableGeometry.height() / 2);
   plotangularvelocitiesApproximation->show();
-
+*/
   approximatePixelTriangle.setR1(0); approximatePixelTriangle.setR2(0);
   for(t = t1; t <= t2; t += 0.01) {
     double dt = 0.01;
     approximatePixelTriangle.rotate(greenredApproximator.getX(t), greenredApproximator.getY(t),
                                     blueredApproximator.getX(t), blueredApproximator.getY(t), dt);
-
+    /*
     plotangularvelocitiesApproximation->graph(0)->addData(t, approximatePixelTriangle.getOmegaX());
     plotangularvelocitiesApproximation->graph(1)->addData(t, approximatePixelTriangle.getOmegaY());
     plotangularvelocitiesApproximation->graph(2)->addData(t, approximatePixelTriangle.getOmegaZ());
     plotangularvelocitiesApproximation->rescaleAxes();
     plotangularvelocitiesApproximation->replot();
+    */
   }
-  
-  //high
+
+  //length
   availableGeometry = QApplication::desktop()->availableGeometry(plotshapesofVectors);
   plotshapesofVectors->resize(availableGeometry.width() / 3, availableGeometry.height() / 2);
   plotshapesofVectors->show();
+
+  availableGeometry = QApplication::desktop()->availableGeometry(plotangularvelocitiesApproximation);
+  plotangularvelocitiesApproximation->resize(availableGeometry.width() / 3, availableGeometry.height() / 2);
+  plotangularvelocitiesApproximation->show();
+
   for(t = t1; t <= t2; t += 0.01) {
     double x21 = greenredApproximator.getX(t), y21 = greenredApproximator.getY(t),
         dx21 = (greenredApproximator.getX(t + 0.001) - greenredApproximator.getX(t)) / 0.001, 
@@ -495,7 +501,7 @@ void VideoPlayer::approximateClicked() {
         dy31 = (blueredApproximator.getY(t + 0.001) - blueredApproximator.getY(t)) / 0.001;
     double a = dx31*x31 + dy31*y31, b = -(dx21*x31 + dy21*y31 + dx31*x21 + dy31*y21), c = dx21*x21 + dy21*y21;
     
-    if(std::abs(a) > 5 && (x21*y31 - y21*x31) > 5) {
+    if(std::abs(a) > 10 && (x21*y31 - y21*x31) > 10) {
       double x21p = greenredApproximator.getX(t - 0.001), y21p = greenredApproximator.getY(t - 0.001),
           dx21p = (greenredApproximator.getX(t) - greenredApproximator.getX(t - 0.001)) / 0.001,
           dy21p = (greenredApproximator.getY(t) - greenredApproximator.getY(t - 0.001)) / 0.001;
@@ -511,12 +517,25 @@ void VideoPlayer::approximateClicked() {
       double z31 = std::pow(((omega3*x31 - dy31)*(y21 - A*y31) - (dx31 + omega3*y31)*(x21 - A*x31)) / dA, 0.5);
       double z21 = A*z31;
 
-      plotshapesofVectors->graph(0)->addData(t, std::pow(x21*x21 + y21*y21 + z21*z21, 0.5));
-      plotshapesofVectors->graph(1)->addData(t, std::pow(x31*x31 + y31*y31 + z31*z31, 0.5));
-      plotshapesofVectors->graph(2)->addData(t, approximatePixelTriangle.getR1());
-      plotshapesofVectors->graph(3)->addData(t, approximatePixelTriangle.getR2());
-      plotshapesofVectors->rescaleAxes();
-      plotshapesofVectors->replot();
+      if(dA > 0.1) {
+        plotshapesofVectors->graph(0)->addData(t, std::pow(x21*x21 + y21*y21 + z21*z21, 0.5));
+        plotshapesofVectors->graph(1)->addData(t, std::pow(x31*x31 + y31*y31 + z31*z31, 0.5));
+        plotshapesofVectors->graph(2)->addData(t, approximatePixelTriangle.getR1());
+        plotshapesofVectors->graph(3)->addData(t, approximatePixelTriangle.getR2());
+        plotshapesofVectors->rescaleAxes();
+        plotshapesofVectors->replot();
+
+        if(std::abs(z31) > 0.1) {
+         double omega1 = (omega3*x31 - dy31) / z31;
+         double omega2 = (omega3*y31 + dx31) / z31;
+         plotangularvelocitiesApproximation->graph(0)->addData(t, omega1);
+         plotangularvelocitiesApproximation->graph(1)->addData(t, omega2);
+         plotangularvelocitiesApproximation->graph(2)->addData(t, omega3);
+         plotangularvelocitiesApproximation->rescaleAxes();
+         plotangularvelocitiesApproximation->replot();
+
+        }
+      }
     } else {
       double A = (-b + std::pow(std::pow(b, 2) - 4*a*c, 0.5)) / (2*c);
     }
